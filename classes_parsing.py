@@ -1,30 +1,37 @@
+'''v050922
+.dict'''
 import datetime
 import json
 import os
 
 
 class Dicts():
-    '''v0002 '''
+    '''v0003 '''
     folderlog = 'tasklogs/'
     name = 'noname'
     
-    def __init__(self, dct):
-        self.dct = dct
+    def __init__(self, dct:dict):
+        self.dict = dct
         print('установка :', datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') )
-        self.dct['datestr0'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
-        self.dct['datestr'] = None
+        self.dict['datestr0'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
+        self.dict['datestr'] = None
+        if ('name' in dct.keys()) and (dct['name']!=''):
+            self.name = dct['name'] 
+        
+            
+            
     
     def check(self):
-        return True
+        return False
         
     def save(self):
         if not self.check():
             print('не правильный словарь')
-        if self.dct['datestr'] == None:
-            self.dct['datestr'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
-        self.filename = self.folderlog + 'd_' + self.name + '_' + self.dct['datestr'] + '.json'
+        if self.dict['datestr'] == None:
+            self.dict['datestr'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
+        self.filename = self.folderlog + 'd_' + self.name + '_' + self.dict['datestr'] + '.json'
         with open(self.filename, 'w') as writefile:
-            json.dump(self.dct, writefile)
+            json.dump(self.dict, writefile)
             print('dict записан: ', self.filename)
             
     def load(self):
@@ -32,14 +39,14 @@ class Dicts():
         print([e for e in enumerate(files)])
         i = int(input('введите номер файла: '))
         with open(self.folderlog + files[i], 'r') as writefile:
-            self.dct = json.load(writefile)
+            self.dict = json.load(writefile)
         print(f'dict загружен :{self.folderlog + files[i]},\n всего\
-        \n загружены атрибуты {self.dct.keys()} \
-        ')#{self.dct.values()}')
+        \n загружены атрибуты {self.dict.keys()} \
+        ')#{self.dict.values()}')
         print(f'надо определить имя, из какого атрибута взять? \n\
-        {[e for e in enumerate(self.dct.keys()) ]}')
+        {[e for e in enumerate(self.dict.keys()) ]}')
         c = int(input('номер: '))
-        self.name = self.dct[list(self.dct.keys())[c]]
+        self.name = self.dict[list(self.dict.keys())[c]]
         print (f'выбрано - {self.name}')
         
         
@@ -50,30 +57,35 @@ class Dtask(Dicts):
         print(f'атрибуты для задачи :\
                  name, urls, domain, taskdescr, datestr0 - АВТОМАТОМ\
                  \n папка для сохранений задач {self.folderlog}')
-        #TODO DRY
-        self.dct = dct
+        #TODO DRY maybe add supper.init()
+        self.dict = dct
         print('установка :', datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') )
-        self.dct['datestr0'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
-        self.dct['datestr'] = None
-        print(f'coздан {self.dct}')
+        self.dict['datestr0'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
+        self.dict['datestr'] = None
+        if ('name' in dct.keys()) and (dct['name']!=''):
+            self.name = dct['name'] 
+        print(f'coздан {self.dict}')
     
     def check(self):
         return False
 
-class Dlinks1(Dicts):
-    '''v0004 save(self, taskname, links, urls, domain, taskdescr, datestr=None)'''
+class Dlinks(Dicts):
+    '''v0005 save(self, taskname, links, urls, domain, taskdescr, datestr=None)'''
     
     folderlog = 'links/'
     
-    def __init__(self, dct={}):
+    def __init__(self, dct:dict):
+        ''' parametr: Dtask.dict'''
         print(f'атрибуты для линков :\
                 taskname, links, urls, domain, taskdescr, datestr=None, datestr0 - АВТОМАТОМ\
                  \n папка для сохранений задач {self.folderlog}')
-        self.dct = dct
-        self.dct['links'] = []
+        self.dict = dct
+        self.dict['links'] = []
+        if ('name' in dct.keys()) and (dct['name']!=''):
+            self.name = dct['name'] 
         
 
-class Dlinks():
+class Dlinks0():
     '''v0002 save(self, taskname, links, urls, domain, taskdescr, datestr=None)'''    
 
     folderlinks = 'links/'
