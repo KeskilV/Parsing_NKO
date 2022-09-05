@@ -17,10 +17,7 @@ class Dicts():
         self.dict['datestr'] = None
         if ('name' in dct.keys()) and (dct['name']!=''):
             self.name = dct['name'] 
-        
-            
-            
-    
+
     def check(self):
         return False
         
@@ -54,18 +51,8 @@ class Dtask(Dicts):
     '''v0000 Задачи'''
     folderlog = 'tasklogs/'
     def __init__(self, dct):
-        print(f'атрибуты для задачи :\
-                 name, urls, domain, taskdescr, datestr0 - АВТОМАТОМ\
-                 \n папка для сохранений задач {self.folderlog}')
-        #TODO DRY maybe add supper.init()
-        self.dict = dct
-        print('установка :', datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') )
-        self.dict['datestr0'] = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
-        self.dict['datestr'] = None
-        if ('name' in dct.keys()) and (dct['name']!=''):
-            self.name = dct['name'] 
-        print(f'coздан {self.dict}')
-    
+        super().__init__(dct)
+
     def check(self):
         return False
 
@@ -76,55 +63,10 @@ class Dlinks(Dicts):
     
     def __init__(self, dct:dict):
         ''' parametr: Dtask.dict'''
-        print(f'атрибуты для линков :\
-                taskname, links, urls, domain, taskdescr, datestr=None, datestr0 - АВТОМАТОМ\
-                 \n папка для сохранений задач {self.folderlog}')
-        self.dict = dct
+        super().__init__(dct)
         self.dict['links'] = []
-        if ('name' in dct.keys()) and (dct['name']!=''):
-            self.name = dct['name'] 
-        
+    
+    def check(self):
+        return False
+    
 
-class Dlinks0():
-    '''v0002 save(self, taskname, links, urls, domain, taskdescr, datestr=None)'''    
-
-    folderlinks = 'links/'
-
-    def save(self, taskname, links, urls, domain, taskdescr, datestr=None):
-        self.taskname = taskname
-        self.links = links
-        self.urls = urls
-        self.domain = domain
-        self.taskdescr = taskdescr
-        print(datestr,'now:', datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') )
-        if datestr == None:
-            self.datestr = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')
-        else:
-            self.datestr = datestr
-        dlinks = {'taskname': self.taskname,
-                  'links': self.links,
-                  'datestr': self.datestr,
-                  'urls': self.urls,
-                  'domain': self.domain,
-                  'taskdescr': self.taskdescr}
-
-        with open(self.folderlinks + 'dlinks_' + self.taskname + '_' + self.datestr + '.json', 'w') as writefile:
-            json.dump(dlinks, writefile)
-            print('линки записаны: ', self.folderlinks + 'dlinks_' + self.taskname + '_' + self.datestr + '.json')
-
-    def load(self):
-        files = os.listdir(self.folderlinks)
-        print([e for e in enumerate(files)])
-        i = int(input('введите номер файла: '))
-        with open(self.folderlinks + files[i], 'r') as writefile:
-            dlinks = json.load(writefile)
-        self.taskname = dlinks['taskname']
-        self.links = dlinks['links']
-        self.urls = dlinks['urls']
-        self.domain = dlinks['domain']
-        self.taskdescr = dlinks['taskdescr']
-        self.datestr = dlinks['datestr']
-        print(f'линки загружены с :{self.folderlinks + files[i]},\n всего\
-        {len(self.links)} линков,\n загружены атрибуты {dlinks.keys()} \
-        {self.taskname, self.urls, self.domain, self.taskdescr, self.datestr}')
-        return self.links
